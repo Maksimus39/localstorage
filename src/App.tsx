@@ -1,35 +1,28 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
 
 function App() {
 
     const [value, setValue] = React.useState<number>(0)
 
-    const incHandler = () => {
-        setValue(value + 1)
-    }
-
-    const setToLocalStorageHandler = () => {
-        localStorage.setItem('counterValue', JSON.stringify(value))
-        localStorage.setItem('counterValue + 1', JSON.stringify(value + 1))
-    }
-
-    const getToLocalStorageHandler = () => {
+    useEffect(() => {
         let valueAsString = localStorage.getItem('counterValue')
         if (valueAsString) {
             let newValue = JSON.parse(valueAsString)
             setValue(newValue)
         }
+    }, []);
+
+
+    useEffect(() => {
+        localStorage.setItem('counterValue', JSON.stringify(value))
+    }, [value]);
+
+
+    const incHandler = () => {
+        setValue(value + 1)
     }
 
-    const clearLocalStorageHandler = () => {
-        localStorage.clear()
-        setValue(0)
-    }
-
-    const removeItemFromLocalStorageHandler = () => {
-        localStorage.removeItem('counterValue + 1')
-    }
 
     return (
         <div className="App">
@@ -37,10 +30,7 @@ function App() {
             <h1>{value}</h1>
 
             <button onClick={incHandler}>inc</button>
-            <button onClick={setToLocalStorageHandler}>setToLocalStorage</button>
-            <button onClick={getToLocalStorageHandler}>getToLocalStorage</button>
-            <button onClick={clearLocalStorageHandler}>clearLocalStorage</button>
-            <button onClick={removeItemFromLocalStorageHandler}>removeItemFromLocalStorage</button>
+
         </div>
     );
 }
